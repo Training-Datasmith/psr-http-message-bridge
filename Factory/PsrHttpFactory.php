@@ -79,7 +79,7 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
         foreach ($symfonyRequest->headers->all() as $name => $value) {
             try {
                 $request = $request->withHeader($name, $value);
-            } catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException) {
                 // ignore invalid header
             }
         }
@@ -161,7 +161,7 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
         } else {
             $stream = $this->streamFactory->createStreamFromFile('php://temp', 'wb+');
             if ($symfonyResponse instanceof StreamedResponse || $symfonyResponse instanceof BinaryFileResponse) {
-                ob_start(static function ($buffer) use ($stream) {
+                ob_start(static function ($buffer) use ($stream): string {
                     $stream->write($buffer);
 
                     return '';
@@ -192,7 +192,7 @@ class PsrHttpFactory implements HttpMessageFactoryInterface
         foreach ($headers as $name => $value) {
             try {
                 $response = $response->withHeader($name, $value);
-            } catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException) {
                 // ignore invalid header
             }
         }
